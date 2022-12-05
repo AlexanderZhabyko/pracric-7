@@ -1,0 +1,15 @@
+C:\Users\zhaby\source\repos\pracric-7\pracric-7\bin\Debug\net6.0\pracric-7.exe
+C:\Users\zhaby\source\repos\pracric-7\pracric-7\bin\Debug\net6.0\pracric-7.deps.json
+C:\Users\zhaby\source\repos\pracric-7\pracric-7\bin\Debug\net6.0\pracric-7.runtimeconfig.json
+C:\Users\zhaby\source\repos\pracric-7\pracric-7\bin\Debug\net6.0\pracric-7.dll
+C:\Users\zhaby\source\repos\pracric-7\pracric-7\bin\Debug\net6.0\pracric-7.pdb
+C:\Users\zhaby\source\repos\pracric-7\pracric-7\obj\Debug\net6.0\pracric-7.csproj.AssemblyReference.cache
+C:\Users\zhaby\source\repos\pracric-7\pracric-7\obj\Debug\net6.0\pracric-7.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\zhaby\source\repos\pracric-7\pracric-7\obj\Debug\net6.0\pracric-7.AssemblyInfoInputs.cache
+C:\Users\zhaby\source\repos\pracric-7\pracric-7\obj\Debug\net6.0\pracric-7.AssemblyInfo.cs
+C:\Users\zhaby\source\repos\pracric-7\pracric-7\obj\Debug\net6.0\pracric-7.csproj.CoreCompileInputs.cache
+C:\Users\zhaby\source\repos\pracric-7\pracric-7\obj\Debug\net6.0\pracric-7.dll
+C:\Users\zhaby\source\repos\pracric-7\pracric-7\obj\Debug\net6.0\refint\pracric-7.dll
+C:\Users\zhaby\source\repos\pracric-7\pracric-7\obj\Debug\net6.0\pracric-7.pdb
+C:\Users\zhaby\source\repos\pracric-7\pracric-7\obj\Debug\net6.0\pracric-7.genruntimeconfig.cache
+C:\Users\zhaby\source\repos\pracric-7\pracric-7\obj\Debug\net6.0\ref\pracric-7.dll
