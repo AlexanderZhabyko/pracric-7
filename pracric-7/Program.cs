@@ -10,8 +10,8 @@
         class Program
         {
             static string path;
-            static string[] files, Folder;
-            static int len = 1;
+            private static string[] files, Folder;
+            static int len = 1; /*Длина*/
             static List<string> prevPath = new List<string>(len + 1);
             static void OpenPath(string p, bool prev = true) /*переходы в меню*/
             {
@@ -70,42 +70,42 @@
                     OpenPath("");
                 while (true)
                 {
-                    int selected = 0, last = 0, totalLength = Folder.Length + files.Length;
+                    int pos = 0, last = 0, totalLength = Folder.Length + files.Length;
                     bool rewrite = false;
                     Console.Title = path;
                     Console.Clear();
                     Console.WriteLine("=====Папки======\n");
                     for (int i = 0; i < Folder.Length; i++)
-                        Console.WriteLine((i == selected ? "      ->" : "") + Folder[i] + (i == selected ? " :<-" : ""));
+                        Console.WriteLine((i == pos ? "      ->" : "") + Folder[i] + (i == pos ? " :<-" : ""));
                     Console.WriteLine("\n=====Файлы======\n");
                     for (int i = 0; i < files.Length; i++)
-                        Console.WriteLine((selected >= Folder.Length && i == selected - Folder.Length ? "      ->" : " ") + files[i] + (selected >= Folder.Length && i == selected - Folder.Length ? "<-" : ""));
+                        Console.WriteLine((pos >= Folder.Length && i == pos - Folder.Length ? "      ->" : " ") + files[i] + (pos >= Folder.Length && i == pos - Folder.Length ? "<-" : ""));
                     while (true)
                     {
                         ConsoleKeyInfo clavisha = Console.ReadKey(true);
                         if (clavisha.Key == ConsoleKey.DownArrow)
                         {
-                            selected++;
-                            if (selected > totalLength - 1)
-                                selected = 0;
+                            pos++;
+                            if (pos > totalLength - 1)
+                                pos = 0;
                         }
                         else if (clavisha.Key == ConsoleKey.UpArrow)
                         {
-                            selected--;
-                            if (selected < 0)
-                                selected = totalLength - 1;
+                            pos--;
+                            if (pos < 0)
+                                pos = totalLength - 1;
                         }
                         else if (clavisha.Key == ConsoleKey.Enter)
                         {
-                            if (selected < Folder.Length)
+                            if (pos < Folder.Length)
                             {
-                                OpenPath((path.Length > 3) ? path + '\\' + Folder[selected] : path + Folder[selected]);
+                                OpenPath((path.Length > 3) ? path + '\\' + Folder[pos] : path + Folder[pos]);
                                 break;
                             }
                             else
                                 try
                                 {
-                                    System.Diagnostics.Process.Start(path + '\\' + files[selected - Folder.Length]);
+                                    System.Diagnostics.Process.Start(path + '\\' + files[pos - Folder.Length]);
                                 }
                                 catch { }
                         }
@@ -143,10 +143,10 @@
                                 {
                                     Console.Clear();
                                     ex = true;
-                                    if (selected < Folder.Length)
+                                    if (pos < Folder.Length)
                                     {
-                                        Console.WriteLine(path + "\\" + Folder[selected]);
-                                        System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(path + "\\" + Folder[selected]);
+                                        Console.WriteLine(path + "\\" + Folder[pos]);
+                                        System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(path + "\\" + Folder[pos]);
                                         Console.WriteLine("Создано : " + di.CreationTime.ToLongDateString() + "  " + di.CreationTime.ToLongTimeString());
                                         Console.Write("для выхода нажмите на любую клавишу");
                                         Console.ReadKey(true);
@@ -154,8 +154,8 @@
                                     else
                                     {
 
-                                        Console.WriteLine(path + "\\" + files[selected - Folder.Length]);
-                                        System.IO.FileInfo di = new System.IO.FileInfo(path + /*"\\" +*/ files[selected - Folder.Length]);
+                                        Console.WriteLine(path + "\\" + files[pos - Folder.Length]);
+                                        System.IO.FileInfo di = new System.IO.FileInfo(path + /*"\\" +*/ files[pos - Folder.Length]);
                                         float Gb = (float)(di.Length / 1024.0 / 1024.0); /*перевод в гигабайты*/
                                         Console.WriteLine("Размер : " + di.Length.ToString() + " Байт " + (Gb < 921.6 ? (Gb >= 0.9216) ? "(" + (Gb).ToString() + " Мб)" : "(" + (Gb / 1024.0).ToString() + " Гб)" : ")"));
                                         Console.WriteLine("Создано : " + di.CreationTime.ToLongDateString() + "  " + di.CreationTime.ToLongTimeString());
@@ -167,7 +167,7 @@
                                 else if (podmenu == "открыть в проводнике")
                                 {
                                     ex = true;
-                                    System.Diagnostics.Process.Start(path + '\\' + Folder[selected]);
+                                    System.Diagnostics.Process.Start(path + '\\' + Folder[pos]);
                                 }
 
                                 else if (podmenu == "Выход мз приложения")
@@ -178,14 +178,14 @@
                         }
                         else
                         {
-                            if (selected < Folder.Length)
+                            if (pos < Folder.Length)
                             {
-                                for (int n = (selected < Folder.Length - 1) ? selected + 1 : 0; n < Folder.Length; n++)
+                                for (int n = (pos < Folder.Length - 1) ? pos + 1 : 0; n < Folder.Length; n++)
                                 {
                                     if (Char.ToLower(Folder[n][0]) == Char.ToLower(clavisha.KeyChar))
                                         if (Char.ToLower(Folder[n][0]) == Char.ToLower(clavisha.KeyChar))
                                         {
-                                            selected = n;
+                                            pos = n;
                                             break;
                                         }
                                         else if (n == Folder.Length - 1)
@@ -193,7 +193,7 @@
                                             for (int m = 0; m < Folder.Length; m++)
                                                 if (Char.ToLower(Folder[m][0]) == Char.ToLower(clavisha.KeyChar))
                                                 {
-                                                    selected = m;
+                                                    pos = m;
                                                     break;
                                                 }
                                         }
@@ -203,11 +203,11 @@
                             else
                             {
 
-                                for (int n = (selected - Folder.Length < files.Length - 1) ? selected - Folder.Length + 1 : Folder.Length; n < files.Length; n++)
+                                for (int n = (pos - Folder.Length < files.Length - 1) ? pos - Folder.Length + 1 : Folder.Length; n < files.Length; n++)
                                 {
                                     if (Char.ToLower(files[n][0]) == Char.ToLower(clavisha.KeyChar))
                                     {
-                                        selected = Folder.Length + n;
+                                        pos = Folder.Length + n;
                                         break;
                                     }
                                     else if (n == files.Length - 1)
@@ -215,18 +215,18 @@
                                         for (int m = 0; m < files.Length; m++)
                                             if (Char.ToLower(files[m][0]) == Char.ToLower(clavisha.KeyChar))
                                             {
-                                                selected = m + Folder.Length;
+                                                pos = m + Folder.Length;
                                                 break;
                                             }
                                     }
                                 }
                             }
                         }
-                        if (last == selected && !rewrite)
+                        if (last == pos && !rewrite)
                         {
                             continue;
                         }
-                        if (selected < Folder.Length)
+                        if (pos < Folder.Length)
                         {
                             Console.SetCursorPosition(35, 2);
                             Console.Write("Назад - Escape");
@@ -246,8 +246,8 @@
                                 Console.SetCursorPosition(0, last + 5);
                                 Console.Write(files[last - Folder.Length]);
                             }
-                            Console.SetCursorPosition(0, selected + 2);
-                            Console.Write("      ->: " + Folder[selected] + " :<-");
+                            Console.SetCursorPosition(0, pos + 2);
+                            Console.Write("      ->: " + Folder[pos] + " :<-");
                         }
                         else
                         {
@@ -265,10 +265,10 @@
                                 Console.SetCursorPosition(0, last + 5);
                                 Console.Write(files[last - Folder.Length]);
                             }
-                            Console.SetCursorPosition(0, selected + 5);
-                            Console.Write("      ->: " + files[selected - Folder.Length] + " :<-");
+                            Console.SetCursorPosition(0, pos + 5);
+                            Console.Write("      ->: " + files[pos - Folder.Length] + " :<-");
                         }
-                        last = selected;
+                        last = pos;
                     }
 
                 }
@@ -327,45 +327,6 @@
                     last = selected;
                 }
             }
-            /*static int menu2(string[] items, string title)
-            {
-                Console.Clear();
-                Console.WriteLine(title);
-                int enterCount = entersCount(title) + 1;
-                int selected = 0, last = 0;
-                for (int i = 0; i < items.Length; i++)
-                    Console.WriteLine((i == selected ? "  ->" : "") + items[i] + (i == selected));
-                while (true)
-                {
-                    ConsoleKeyInfo ck = Console.ReadKey(true);
-                    if (ck.Key == ConsoleKey.DownArrow)
-                    {
-                        selected++;
-                        if (selected > items.Length - 1)
-                            selected = 0;
-                    }
-                    else if (ck.Key == ConsoleKey.UpArrow)
-                    {
-                        selected--;
-                        if (selected < 0)
-                            selected = items.Length - 1;
-                    }
-                    else if (ck.Key == ConsoleKey.Enter)
-                    {
-                        return selected;
-                    }
-                    if (selected != last)
-                    {
-                        Console.SetCursorPosition(0, enterCount + last);
-                        Console.Write(emptyString(12 + items[last].Length));
-                        Console.SetCursorPosition(0, enterCount + last);
-                        Console.Write(items[last]);
-                        Console.SetCursorPosition(0, enterCount + selected);
-                        Console.Write("  ->" + items[selected] + "<-");
-                    }
-                    last = selected;
-                }
-            }*/
             static string[] File(string[] v) /*имя файла и массив */
             {
                 for (int i = 0; i < v.Length; i++)
