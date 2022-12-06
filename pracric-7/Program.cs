@@ -11,7 +11,7 @@
         {
             static string path;
             static string[] files, Folder;
-            static int len = 20; /*количество папок*/
+            static int len = 1;
             static List<string> prevPath = new List<string>(len + 1);
             static void OpenPath(string p, bool prev = true) /*переходы в меню*/
             {
