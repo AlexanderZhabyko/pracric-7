@@ -20,20 +20,20 @@
                     if (prevPath.Count == len)
                         prevPath.RemoveAt(0);
                     prevPath.Add(p);
-                    
+
                 }
                 if (p == "")
                 {
                     Console.Clear();
                     path = menu(System.IO.Directory.GetLogicalDrives(), "-----------------Проводник-----------------"); /*диски*/
-                    
+
                     if (prev)
                     {
                         if (prevPath.Count == len)
                             prevPath.RemoveAt(0);
                         prevPath.Add(path);
                     }
-                    
+
                     files = File(System.IO.Directory.GetFiles(path)); /*показ файлов*/
                     Folder = File(System.IO.Directory.GetDirectories(path)); /*показ папок*/
 
@@ -44,7 +44,7 @@
                     while (path[path.Length - 1] == '\\')
                         path = path.Remove(path.Length - 1);
                     if (path.Length < 3) path += '\\';
-                    
+
                     try
                     {
                         files = File(System.IO.Directory.GetFiles(path));
@@ -58,54 +58,58 @@
                         else OpenPath(prevPath[prevPath.Count - 1]);
                     }
                 }
-                
+
             }
 
             static void Main(string[] args) /*директории*/
             {
-                
+
                 if (args.Length > 0 && System.IO.Directory.Exists(args[0]))
                     OpenPath(args[0]);
                 else
                     OpenPath("");
                 while (true)
                 {
-                    int pos = 0, last = 0, totalLength = Folder.Length + files.Length;
+                    int selected = 0, last = 0, totalLength = Folder.Length + files.Length;
                     bool rewrite = false;
                     Console.Title = path;
                     Console.Clear();
                     Console.WriteLine("=====Папки======\n");
                     for (int i = 0; i < Folder.Length; i++)
-                        Console.WriteLine((i == pos ? "      ->" : "") + Folder[i] + (i == pos ? " :<-" : ""));
+                        Console.WriteLine((i == selected ? "      ->" : "") + Folder[i] + (i == selected ? " :<-" : ""));
                     Console.WriteLine("\n=====Файлы======\n");
                     for (int i = 0; i < files.Length; i++)
-                        Console.WriteLine((pos >= Folder.Length && i == pos - Folder.Length ? "      ->" : " ") + files[i] + (pos >= Folder.Length && i == pos - Folder.Length ? "<-" : ""));
+                        Console.WriteLine((selected >= Folder.Length && i == selected - Folder.Length ? "      ->" : " ") + files[i] + (selected >= Folder.Length && i == selected - Folder.Length ? "<-" : ""));
                     while (true)
                     {
                         ConsoleKeyInfo clavisha = Console.ReadKey(true);
                         if (clavisha.Key == ConsoleKey.DownArrow)
                         {
-                            pos++;
-                            if (pos > totalLength - 1)
-                                pos = 0;
+                            selected++;
+                            if (selected > totalLength - 1)
+                                selected = 0;
                         }
                         else if (clavisha.Key == ConsoleKey.UpArrow)
                         {
-                            pos--;
-                            if (pos < 0)
-                                pos = totalLength - 1;
+                            selected--;
+                            if (selected < 0)
+                                selected = totalLength - 1;
                         }
                         else if (clavisha.Key == ConsoleKey.Enter)
                         {
-                            if (pos < Folder.Length)
+                            if (selected < Folder.Length)
                             {
-                                OpenPath((path.Length > 3) ? path + '\\' + Folder[pos] : path + Folder[pos]);
+                                OpenPath((path.Length > 3) ? path + '\\' + Folder[selected] : path + Folder[selected]);
                                 break;
                             }
                             else
                                 try
                                 {
-                                    System.Diagnostics.Process.Start(path + '\\' + files[pos - Folder.Length]);
+                                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                                    {
+                                        FileName = path + '\\' + files[selected - Folder.Length],
+                                        UseShellExecute = true
+                                    });
                                 }
                                 catch { }
                         }
@@ -143,10 +147,10 @@
                                 {
                                     Console.Clear();
                                     ex = true;
-                                    if (pos < Folder.Length)
+                                    if (selected < Folder.Length)
                                     {
-                                        Console.WriteLine(path + "\\" + Folder[pos]);
-                                        System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(path + "\\" + Folder[pos]);
+                                        Console.WriteLine(path + "\\" + Folder[selected]);
+                                        System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(path + "\\" + Folder[selected]);
                                         Console.WriteLine("Создано : " + di.CreationTime.ToLongDateString() + "  " + di.CreationTime.ToLongTimeString());
                                         Console.Write("для выхода нажмите на любую клавишу");
                                         Console.ReadKey(true);
@@ -154,8 +158,8 @@
                                     else
                                     {
 
-                                        Console.WriteLine(path + "\\" + files[pos - Folder.Length]);
-                                        System.IO.FileInfo di = new System.IO.FileInfo(path + /*"\\" +*/ files[pos - Folder.Length]);
+                                        Console.WriteLine(path + "\\" + files[selected - Folder.Length]);
+                                        System.IO.FileInfo di = new System.IO.FileInfo(path + /*"\\" +*/ files[selected - Folder.Length]);
                                         float Gb = (float)(di.Length / 1024.0 / 1024.0); /*перевод в гигабайты*/
                                         Console.WriteLine("Размер : " + di.Length.ToString() + " Байт " + (Gb < 921.6 ? (Gb >= 0.9216) ? "(" + (Gb).ToString() + " Мб)" : "(" + (Gb / 1024.0).ToString() + " Гб)" : ")"));
                                         Console.WriteLine("Создано : " + di.CreationTime.ToLongDateString() + "  " + di.CreationTime.ToLongTimeString());
@@ -167,7 +171,12 @@
                                 else if (podmenu == "открыть в проводнике")
                                 {
                                     ex = true;
-                                    System.Diagnostics.Process.Start(path + '\\' + Folder[pos]);
+                                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                                    { 
+                                       FileName = path + '\\' + Folder[selected],
+                                       UseShellExecute = true
+
+                                    }); /*---------------------*/
                                 }
 
                                 else if (podmenu == "Выход мз приложения")
@@ -178,14 +187,14 @@
                         }
                         else
                         {
-                            if (pos < Folder.Length)
+                            if (selected < Folder.Length)
                             {
-                                for (int n = (pos < Folder.Length - 1) ? pos + 1 : 0; n < Folder.Length; n++)
+                                for (int n = (selected < Folder.Length - 1) ? selected + 1 : 0; n < Folder.Length; n++)
                                 {
                                     if (Char.ToLower(Folder[n][0]) == Char.ToLower(clavisha.KeyChar))
                                         if (Char.ToLower(Folder[n][0]) == Char.ToLower(clavisha.KeyChar))
                                         {
-                                            pos = n;
+                                            selected = n;
                                             break;
                                         }
                                         else if (n == Folder.Length - 1)
@@ -193,7 +202,7 @@
                                             for (int m = 0; m < Folder.Length; m++)
                                                 if (Char.ToLower(Folder[m][0]) == Char.ToLower(clavisha.KeyChar))
                                                 {
-                                                    pos = m;
+                                                    selected = m;
                                                     break;
                                                 }
                                         }
@@ -203,11 +212,11 @@
                             else
                             {
 
-                                for (int n = (pos - Folder.Length < files.Length - 1) ? pos - Folder.Length + 1 : Folder.Length; n < files.Length; n++)
+                                for (int n = (selected - Folder.Length < files.Length - 1) ? selected - Folder.Length + 1 : Folder.Length; n < files.Length; n++)
                                 {
                                     if (Char.ToLower(files[n][0]) == Char.ToLower(clavisha.KeyChar))
                                     {
-                                        pos = Folder.Length + n;
+                                        selected = Folder.Length + n;
                                         break;
                                     }
                                     else if (n == files.Length - 1)
@@ -215,18 +224,18 @@
                                         for (int m = 0; m < files.Length; m++)
                                             if (Char.ToLower(files[m][0]) == Char.ToLower(clavisha.KeyChar))
                                             {
-                                                pos = m + Folder.Length;
+                                                selected = m + Folder.Length;
                                                 break;
                                             }
                                     }
                                 }
                             }
                         }
-                        if (last == pos && !rewrite)
+                        if (last == selected && !rewrite)
                         {
                             continue;
                         }
-                        if (pos < Folder.Length)
+                        if (selected < Folder.Length)
                         {
                             Console.SetCursorPosition(35, 2);
                             Console.Write("Назад - Escape");
@@ -246,8 +255,8 @@
                                 Console.SetCursorPosition(0, last + 5);
                                 Console.Write(files[last - Folder.Length]);
                             }
-                            Console.SetCursorPosition(0, pos + 2);
-                            Console.Write("      ->: " + Folder[pos] + " :<-");
+                            Console.SetCursorPosition(0, selected + 2);
+                            Console.Write("      ->: " + Folder[selected] + " :<-");
                         }
                         else
                         {
@@ -265,10 +274,10 @@
                                 Console.SetCursorPosition(0, last + 5);
                                 Console.Write(files[last - Folder.Length]);
                             }
-                            Console.SetCursorPosition(0, pos + 5);
-                            Console.Write("      ->: " + files[pos - Folder.Length] + " :<-");
+                            Console.SetCursorPosition(0, selected + 5);
+                            Console.Write("      ->: " + files[selected - Folder.Length] + " :<-");
                         }
-                        last = pos;
+                        last = selected;
                     }
 
                 }
@@ -278,10 +287,10 @@
             static string menu(string[] items, string title) /*меню*/
             {
                 Console.Clear();
-                
+
                 Console.WriteLine(title);
                 int enterCount = EntersCount(title) + 1;
-                
+
                 int selected = 0, last = 0;
                 for (int i = 0; i < items.Length; i++)
                     Console.WriteLine((i == selected ? "  ->" : "") + items[i] + (i == selected ? "" : ""));
@@ -364,7 +373,7 @@
                 {
                     Double FreeSpace = drive.AvailableFreeSpace / 1024 / 1024 / 1024;
                     Double AllSpace = drive.TotalSize / 1024 / 1024 / 1024;
-                    
+
                 }
             }
         }
